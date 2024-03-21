@@ -59,32 +59,20 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <Nuxt/>
+
+        <v-data-table
+          :headers="headers"
+          :items="categories"
+          :search="search"
+        >
+          <template v-slot:items="props">
+            <td>{{ props.item.id }}</td>
+            <td>{{ props.item.name }}</td>
+            <td>{{ props.item.parentName }}</td>
+          </template>
+        </v-data-table>
       </v-container>
     </v-main>
-<!--    <v-navigation-drawer-->
-<!--      v-model="rightDrawer"-->
-<!--      :right="right"-->
-<!--      temporary-->
-<!--      fixed-->
-<!--    >-->
-<!--      <v-list>-->
-<!--        <v-list-item @click.native="right = !right">-->
-<!--          <v-list-item-action>-->
-<!--            <v-icon light>-->
-<!--              mdi-repeat-->
-<!--            </v-icon>-->
-<!--          </v-list-item-action>-->
-<!--          <v-list-item-title>Switch drawer (click me)</v-list-item-title>-->
-<!--        </v-list-item>-->
-<!--      </v-list>-->
-<!--    </v-navigation-drawer>-->
-<!--    <v-footer-->
-<!--      :absolute="!fixed"-->
-<!--      app-->
-<!--    >-->
-<!--      <span>&copy; {{ new Date().getFullYear() }}</span>-->
-<!--    </v-footer>-->
   </v-app>
 </template>
 
@@ -93,30 +81,22 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Categories',
-          to: '/categories'
-        }
+
+      headers: [
+        { text: 'ID', value: 'id' },
+        { text: 'Category Name', value: 'name' },
+        { text: 'Parent Name', value: 'parentName' }
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      categories: [],
+      search: ''
+    }
+  },
+  async fetch() {
+    try {
+      const response = await this.$axios.get('/api/categories'); // Replace '/api/categories' with your actual API endpoint
+      this.categories = response.data;
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   }
 }

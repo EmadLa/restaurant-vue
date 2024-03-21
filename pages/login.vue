@@ -33,8 +33,14 @@ export default {
         const token = response.data.data.token;
         console.log("Token: ", token)
         localStorage.setItem('token', token);
-        // Save the token in Vuex store or localStorage
-        // this.$store.commit('auth/setToken', token); // Assuming you have a mutation to set the token
+
+        // if (this.$store.state.auth && this.$store.commit) {
+        localStorage.setItem('token', token);
+        // this.$store.commit('auth/setToken', token);
+        // } else {
+        //   console.error('Auth module or setToken mutation is not defined in the Vuex store');
+        //   return;
+        // }
 
         this.$router.push('/');
       } catch (error) {
